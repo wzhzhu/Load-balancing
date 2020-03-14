@@ -1,0 +1,50 @@
+\section{Trace data and Analysis Methodology}
+
+\subsection{System structure}
+\label{sec2.1}
+The system provides services to users in the form of cloud disk. Users can use cloud disk in a manner similar to local disk, for example, as a system disk or data disk. In the system, each cloud disk segment is divided into fixed-size segments (32GB). The system is divided into several clusters. The architecture of the cluster is shown in figure 1, and the overall architecture is shown in figure 2. The bottom layer of each cluster is an append-only distributed file system. The Block service layer abstracts the append-only files into fixed-size blocks for users by means of log-structure-merge. The Block server is responsible for pulling the segment metadata and passing the data between users and segments in a proxy manner. All read and write traffic to segment goes through the corresponding block server. The master node stores the block server information corresponding to the segment and provides control services for the block server, such as the addition, deletion and error recovery of the block server. 
+
+
+\subsection{Existing Problems}
+\label{sec2.2}
+As cloud computing becomes more widely used, more and more users are deploying their services on the cloud. These users run different types of services, while these services may access cloud disk in very different manner. Using simple rules to place cloud disk may lead to serious load skew between different block servers, so that network resources cannot be fully utilized. Users sending read and write requests to high-load block server will feel serious tail delay, which will affect user experience.
+% As is known to all, the throughput of each device, or rather, each segment varies greatly with time. In the current structure, the throughput of block servers may be imbalanced after a period of time without rebalacing. The imbalance will lead to the following consequences: 
+
+% \begin{itemize}
+%     \item Some block servers may reach the maximum throughput. Cloud disk application providers have to add new servers even new clusters;
+%     \item Long tail effect may appear, i.e., some devices may suffer from high latency and slow reads and writes.
+% \end{itemize}
+
+% In summary, analyses of I/O pattern of cloud disks and efforts to improve the situation are necessary.
+
+\subsection{Analysis Methods}
+\label{sec2.3}
+In order to solve the load skew problem of the block service layer, we conducted a statistical analysis on the trace of the online system to evaluate the impact of different cloud disk access characteristics on cluster load balancing.
+\begin{table}[ht]
+    \footnotesize
+    \centering
+    \begin{tabular}{c|c|c|c|c}
+         Cluster & Number of BS & Number of disk & Type & Capacity\\
+         AY306L & 48 & 2559 & ESSD & 846699G\\
+         AY251Z & 96 & 4696 & ESSD & 1629415G\\
+         AY272T & 82 & 8552 & SSD & 1523944G\\
+         AY306O & 95 & 26297 & Efficient & 3048367G\\
+         AY336D & 96 & 33154 & Efficient & 3062493G\\
+         AY272M & 95 & 32719 & Efficient & 3438001G\\
+    \end{tabular}
+    \caption{Trace Data Attributes}
+    \label{table2.3-1}
+\end{table}
+The details of Trace are shown in Table \ref{table2.3-1}. Trace records the read and write traffic of all segments at different times, with minute granularity, and indicates the block server where the segment is located. We conducted a multidimensional analysis of trace. By observing the load balance of different clusters and the distribution of cloud disk features. We find some key factors.
+At the same time,we use a scheduling simulator is to evaluate the effcet of different placement strategies and scheduling algorithms.
+% Since the current situation is not good enough, we need to analyse the trace as well as schedule the cluster to improve the situation. We use a simulator to simulate the scheduling process and output the schedule result.
+
+In order to analyse if the scheduling strategy is good, we need to define an index to measure the level of load balance. Here we choose the variance of read throughput between block servers as a measurement. As the variance changes over time, we use median of variances over time as a measurement when we want to judge the schedule effect over a period of time. Due to the fact that the movement of a segment employs computation resource as well as time, we define the number of moving as the schedule cost. Thus, the target of rebalance is to minimize read throughput and schedule cost.
+
+% \subsection{Trace Data}
+% \label{sec2.4}
+% We use trace of clusters in business environment for simulation. We select 6 clusters, including ESSD clusters, SSD clusters and efficient clusters in a certain available zone for analysis. Since there are clusters with all levels of performance, the analysis is comprehensive.
+
+% Considering the size of data set and simulation efficiency, the grain fineness of trace data is 1 minute, i.e., we can know the read and write throughput per minute from the trace data. If the time range of trace data is too long, analysis will be difficult. Thus, we select a representative time range, which is from 2020-2-10 17:00 to 2020-2-10 19:00 (UTC+8:00). 
+
+% Each item of trace data includes six fields: time, device, segment, read throughput, write throughput and host. These data are sufficient for analysis and scheduling simulation.
