@@ -1,0 +1,23 @@
+Data Placement&Migration of Storage Systems:
+BASIL: Automated IO Load Balancing Across Storage Devices, FAST'10
+Everest: Scaling down peak loads through I/O off-loading, OSDI'08
+Design Implications for Enterprise Storage Systems via Multi-Dimensional Trace Analysis, SOSP'11
+Balancing Fairness and Efficiency in Tiered Storage Systems with Bottleneck-Aware Allocation, FAST'14
+Pesto: Online storage performance management in virtualized datacenters, SoCC'11
+Romano: Autonomous Storage Management using Performance Prediction in Multi-Tenant Datacenters, SoCC'12
+
+
+Job&Request Scheduling:
+Apollo: Scalable and Coordinated Scheduling for Cloud-Scale Computing, OSDI'14
+Bobtail: Avoiding Long Tails in the Cloud, NSDI'13
+Quincy: Fair Scheduling for Distributed Computing Clusters, SOSP'09
+Altruistic Scheduling in Multi-Resource Clusters, OSDI'16
+
+Resource Reconfiguration and Migration of VM:
+Hotspot Mitigations for the Masses, SoCC'19
+
+Sharding:
+Slicer: Auto-Sharding for Datacenter Applications,OSDI'16
+
+Workload Prediction:
+Resource Central: Understanding and Predicting Workloads for Improved Resource Management in Large Cloud Platforms, SOSP'17
